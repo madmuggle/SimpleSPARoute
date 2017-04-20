@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="utf-8">
+	<link rel="icon" type="image/x-icon" href="data:;base64,=">
+	<style>
+.link:hover {
+	color: blue;
+	text-decoration: underline;
+}
+	</style>
+</head>
+
+<body>
+	<div id="root"></div>
+<script>
+const pages = {
+	"/page1": "<h1>This is Page1, Click the link to go to page 2</h1>",
+	"/page2": "<h1>This is Page2, Click the link to go to page 3</h1>",
+	"/page3": "<h1>This is Page3, Click the link to go to page 1</h1>",
+};
+
+function nextPage(url) {
+	switch (url) {
+	case '/page1': return '/page2';
+	case '/page2': return '/page3';
+	case '/page3': return '/page1';
+	}
+}
+
+function renderPage(url) {
+	const root = document.querySelector('#root');
+	root.innerHTML = pages[url] + newLink(nextPage(url));
+}
+
+function newLink(url) {
+	return `<div class="link" onclick="jump('${url}');">${url}</div>`;
+}
+
+function jump(url) {
+	history.pushState({ name: 'blah' }, '', url);
+	renderPage(url);
+}
+
+window.onpopstate = () => renderPage(document.location.pathname);
+
+const currentPath = document.location.pathname;
+if (Object.keys(pages).some(x => x == currentPath))
+	renderPage(currentPath);
+else
+	renderPage('/page1');
+
+</script>
+</body>
+</html>
