@@ -19,31 +19,24 @@
 <script>
 const pages = { "/page1": page1, "/page2": page2, "/page3": page3 };
 
+function commonPage(index) {
+	const next = (index >= 3) ? 1 : index + 1;
+	return `
+		This is Page ${index}, click the link to next Page:
+		<span class="link" onclick="jump('/page${next}');">link</span>
+	`;
+}
 
 function page1() {
-	return `
-		<h1>This is Page1, Click the link to go to page 2</h1>
-		Click the link to next page: ${newLink('/page2')}
-		<hr>
-	`;
+	return commonPage(1);
 }
 
 function page2() {
-	return `
-		<h1>This is Page2, Click the link to go to page 3</h1>
-		Click the link to next page: ${newLink('/page3')}
-	`;
+	return commonPage(2);
 }
 
 function page3() {
-	return `
-		<h1>This is Page3, Click the link to go to page 1</h1>
-		Click the link to next page: ${newLink('/page1')}
-	`;
-}
-
-function newLink(url) {
-	return `<span class="link" onclick="jump('${url}');">${url}</span>`;
+	return commonPage(3);
 }
 
 function renderPage(url) {
