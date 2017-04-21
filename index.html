@@ -5,8 +5,10 @@
 	<meta charset="utf-8">
 	<link rel="icon" type="image/x-icon" href="data:;base64,=">
 	<style>
-.link:hover {
+.link {
 	color: blue;
+}
+.link:hover {
 	text-decoration: underline;
 }
 	</style>
@@ -19,36 +21,39 @@ const pages = { "/page1": page1, "/page2": page2, "/page3": page3 };
 
 
 function page1() {
-	var t = "<h1>This is Page1, Click the link to go to page 2</h1>";
-	t += newLink('/page2');
-	return t;
+	return `
+		<h1>This is Page1, Click the link to go to page 2</h1>
+		Click the link to next page: ${newLink('/page2')}
+		<hr>
+	`;
 }
 
 function page2() {
-	var t = "<h1>This is Page2, Click the link to go to page 3</h1>";
-	t += newLink('/page3');
-	return t;
+	return `
+		<h1>This is Page2, Click the link to go to page 3</h1>
+		Click the link to next page: ${newLink('/page3')}
+	`;
 }
 
 function page3() {
-	var t = "<h1>This is Page3, Click the link to go to page 1</h1>";
-	t += newLink('/page1');
-	return t;
+	return `
+		<h1>This is Page3, Click the link to go to page 1</h1>
+		Click the link to next page: ${newLink('/page1')}
+	`;
+}
+
+function newLink(url) {
+	return `<span class="link" onclick="jump('${url}');">${url}</span>`;
 }
 
 function renderPage(url) {
 	document.querySelector('#root').innerHTML = pages[url]();
 }
 
-function newLink(url) {
-	return `<div class="link" onclick="jump('${url}');">${url}</div>`;
-}
-
 function jump(url) {
 	history.pushState({ name: 'blah' }, '', url);
 	renderPage(url);
 }
-
 
 window.onpopstate = () => renderPage(document.location.pathname);
 
